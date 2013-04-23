@@ -1,0 +1,7 @@
+language: go
+
+notifications:
+  irc:
+    channels:
+      - "irc.freenode.net#skydb"
+    use_notice: true
