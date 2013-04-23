@@ -10,7 +10,36 @@ DATADIR=/var/lib/sky
 INCLUDEDIR=${PREFIX}/include
 LIBDIR=${PREFIX}/lib
 
-all: build/skyd
+##
+# Sandfox new stuff
+##
+SKY_PACKAGE := github.com/skydb/sky
+BUILD_DIR := $(CURDIR)/.gopath
+
+GOPATH ?= $(BUILD_DIR)
+export GOPATH
+
+SRC_DIR := $(GOPATH)/src
+
+SKY_DIR := $(SRC_DIR)/$(SKY_PACKAGE)
+SKY_MAIN := $(SKY_DIR)/cmd
+
+SKY_BIN_RELATIVE := build/sky
+SKY_BIN := $(CURDIR)/$(SKY_BIN_RELATIVE)
+
+##
+# End Sandfox new stuff
+##
+
+all: $(SKY_BIN)
+
+$(SKY_BIN): $(SKY_DIR)
+	@mkdir -p  $(dir $@)
+	@(cd $(SKY_MAIN); go get -v; go build -v -o $@)
+
+$(SKY_DIR):
+	@mkdir -p $(dir $@)
+	@ln -sf $(CURDIR)/ $@
 
 UNAME=$(shell uname)
 ifeq ($(UNAME), Darwin)
