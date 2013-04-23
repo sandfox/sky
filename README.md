@@ -24,8 +24,7 @@ For instance, on a typical commodity server you can run a funnel analysis at the
 To build Sky from source, you'll first need to install LevelDB, LuaJIT & csky.
 
 ```sh
-$ sudo make deps
-$ go get
+$ [sudo] make deps
 ```
 
 Then to install the Sky server, run:

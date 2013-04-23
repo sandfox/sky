@@ -47,7 +47,17 @@ data:
 	mkdir -p /var/lib/sky
 	chmod 777 /var/lib/sky
 
-deps: leveldb luajit csky data
+##
+# This is hardcoded and horrible, need to scan folders and work this out programatically...
+##
+go:
+	go get github.com/BurntSushi/toml
+	go get github.com/gorilla/mux
+	go get github.com/jmhodges/levigo
+	go get github.com/ugorji/go-msgpack
+
+
+deps: leveldb luajit csky data go
 
 
 ################################################################################
@@ -58,7 +68,7 @@ build:
 	mkdir build
 
 build/skyd: build
-	go build -o build/skyd
+	go build -o build/skyd ./cmd/skyd.go
 
 
 ################################################################################
