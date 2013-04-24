@@ -1,1 +1,10 @@
-language: go
+install:
+  - mkdir -p $GOPATH/src/github.com/sandfox/skyd
+  - mv * $GOPATH/src/github.com/sandfox/skyd
+  - pushd $GOPATH/src/github.com/sandfox/skyd
+  - sudo make deps
+  - go get
+  - make
+  - sudo make install
+  - echo '/usr/local/lib' | sudo tee /etc/ld.so.conf.d/sky.conf
+  - sudo ldconfig
