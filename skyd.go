@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/sandfox/sky/skyd"
+	"github.com/sandfox/skyd/skyd"
 	"io/ioutil"
 	"os"
 	"os/signal"
