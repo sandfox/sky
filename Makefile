@@ -2,6 +2,7 @@
 # Variables
 ################################################################################
 
+SKY_PACKAGE := github.com/skydb/sky
 VERSION=0.3.0
 PREFIX=/usr/local
 DESTDIR=
@@ -10,7 +11,20 @@ DATADIR=/var/lib/sky
 INCLUDEDIR=${PREFIX}/include
 LIBDIR=${PREFIX}/lib
 
-all: build/skyd
+BUILD_DIR := $(CURDIR)/.gopath
+
+GOPATH ?= $(BUILD_DIR)
+export GOPATH
+
+SRC_DIR := $(GOPATH)/src
+
+SKY_DIR := $(SRC_DIR)/$(SKY_PACKAGE)
+SKY_MAIN := $(SKY_DIR)/sky
+
+SKY_BIN_RELATIVE := bin/skyd
+SKY_BIN := $(CURDIR)/$(SKY_BIN_RELATIVE)
+
+all: $(SKY_BIN)
 
 UNAME=$(shell uname)
 ifeq ($(UNAME), Darwin)
@@ -61,11 +75,16 @@ test:
 # Build
 ################################################################################
 
-build:
-	mkdir build
+$(SKY_BIN): $(SKY_DIR)
+	@mkdir -p  $(dir $@)
+	@(cd $(SKY_MAIN); go build $(GO_OPTIONS) -o $@)
+	@echo $(SKY_BIN_RELATIVE) is created.
 
-build/skyd: build
-	go build -o build/skyd
+$(SKY_DIR):
+	@mkdir -p $(dir $@)
+	@rm -f $@
+	@ln -sf $(CURDIR)/ $@
+	@(cd $(SKY_MAIN); go get $(GO_OPTIONS))
 
 
 ################################################################################
@@ -75,9 +94,9 @@ build/skyd: build
 clean:
 	rm -rf build
 
-.PHONY: install clean all csky leveldb luajit data
+.PHONY: install clean all csky leveldb luajit data  $(SKY_BIN) $(SKY_DIR)
 
-install: build/skyd
+install: $(SKY_BIN)
 	install -m 755 -d ${DESTDIR}${BINDIR}
-	install -m 755 build/skyd ${DESTDIR}${BINDIR}/skyd
+	install -m 755 bin/skyd ${DESTDIR}${BINDIR}/skyd
 	install -m 755 -d ${DESTDIR}${DATADIR}

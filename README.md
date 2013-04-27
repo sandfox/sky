@@ -25,6 +25,7 @@ To build Sky from source, you'll first need to install LevelDB, LuaJIT & csky.
 
 ```sh
 $ sudo make deps
+$ cd skyd
 $ go get
 ```
 

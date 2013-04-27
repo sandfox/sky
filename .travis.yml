@@ -1,11 +1,13 @@
 language: go
 
 install:
-  - mkdir -p $GOPATH/src/github.com/sandfox/skyd
-  - mv * $GOPATH/src/github.com/sandfox/skyd
-  - pushd $GOPATH/src/github.com/sandfox/skyd
+  - mkdir -p $GOPATH/src/github.com/skyd/sky
+  - mv * $GOPATH/src/github.com/skyd/sky
+  - pushd $GOPATH/src/github.com/skyd/sky
   - sudo make deps
+  - pushd skyd
   - go get
+  - popd
   - make
   - sudo make install
   - echo '/usr/local/lib' | sudo tee /etc/ld.so.conf.d/sky.conf
@@ -13,3 +15,6 @@ install:
 
 script:
   - make test
+
+notifications:
+  irc: "irc.freenode.org#skydb"
